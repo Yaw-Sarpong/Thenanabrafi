@@ -4,7 +4,7 @@
     <!-- Basic meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article | Jane Doe</title>
+    <title>Article | Nana Abrafi</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,14 +18,28 @@
 <body>
     <!-- ============ SIMPLE NAVBAR (back to main site) ============ -->
     <header class="navbar">
-        <div class="nav-inner">
-            <a href="index.html" class="logo">
-                <span class="logo-highlight">Nana</span> Abrafi
-            </a>
+    <div class="nav-inner">
+        <a href="index.html" class="logo">
+            <span class="logo-highlight">Nana</span> Abrafi
+        </a>
 
-            <nav class="nav-links">
-                <a href="index.html#articles"><i class="fa-solid fa-arrow-left"></i> Back to Articles</a>
-            </nav>
+        <nav class="nav-links">
+            <a href="index.html#articles"><i class="fa-solid fa-arrow-left"></i> Back to Articles</a>
+        </nav>
+
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark or light mode">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+</header>
+
 
             <!-- Optional mobile toggle (not really needed here, but harmless) -->
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">

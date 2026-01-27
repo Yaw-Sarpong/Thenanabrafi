@@ -20,30 +20,36 @@
 <body>
     <!-- ================= HEADER / NAVBAR ================= -->
     <header class="navbar">
-        <div class="nav-inner">
-            <!-- Brand / Logo -->
-            <a href="#hero" class="logo">
-                <span class="logo-highlight">Nana</span> Abrafi
-            </a>
+    <div class="nav-inner">
+        <!-- Brand / Logo -->
+        <a href="#hero" class="logo">
+            <span class="logo-highlight">Nana</span> Abrafi
+        </a>
 
-            <!-- Desktop Navigation Links -->
-            <nav class="nav-links">
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="#articles">Articles</a>
-                <a href="#gallery">Gallery</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#booking" class="nav-cta">Book Me</a>
-            </nav>
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-links">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#articles">Articles</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#booking" class="nav-cta">Book Me</a>
+        </nav>
 
-            <!-- Mobile Hamburger Button -->
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-        </div>
-    </header>
+        <!-- Theme toggle -->
+        <!--<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark or light mode">
+            <i class="fa-solid fa-moon"></i>
+        </button>  -->
+
+        <!-- Mobile Hamburger Button -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+</header>
+
 
     <!-- ================= HERO SECTION ================= -->
     <section id="hero" class="hero-section">
@@ -265,14 +271,14 @@
             </div>
 
             <div class="gallery-grid">
-                <img src="media\2.jpeg" alt="MCing at a corporate gala" class="gallery-item" data-full="media/event1.jpg">
-                <img src="media\3.jpeg" alt="Hosting a conference" class="gallery-item" data-full="media/event2.jpg">
-                <img src="media\4.jpeg" alt="Speaking on stage" class="gallery-item" data-full="media/event3.jpg">
-                <img src="media/5.jpeg" alt="Panel moderation" class="gallery-item" data-full="media/event4.jpg">
-                <img src="media/2.jpeg" alt="Coordinating event flow" class="gallery-item" data-full="media/event5.jpg">
-                <img src="media/5.jpeg" alt="Engaging with the audience" class="gallery-item" data-full="media/event6.jpg">
-                <img src="media/3.jpeg" alt="Event setup and preparation" class="gallery-item" data-full="media/event7.jpg">
-                <img src="media/4.jpeg" alt="Networking at events" class="gallery-item" data-full="media/event8.jpg">
+                <img src="media\2.jpeg" alt="MCing at a corporate gala" class="gallery-item" data-full="media\2.jpeg">
+                <img src="media\3.jpeg" alt="Hosting a conference" class="gallery-item" data-full="media\3.jpeg">
+                <img src="media\4.jpeg" alt="Speaking on stage" class="gallery-item" data-full="media\4.jpeg">
+                <img src="media/5.jpeg" alt="Panel moderation" class="gallery-item" data-full="media/5.jpeg">
+                <img src="media/2.jpeg" alt="Coordinating event flow" class="gallery-item" data-full="media/2.jpeg">
+                <img src="media/5.jpeg" alt="Engaging with the audience" class="gallery-item" data-full="media/5.jpeg">
+                <img src="media/3.jpeg" alt="Event setup and preparation" class="gallery-item" data-full="media/3.jpg">
+                <img src="media/4.jpeg" alt="Networking at events" class="gallery-item" data-full="media/4.jpg">
             </div>
         </div>
     </section>
@@ -325,52 +331,65 @@
     </section>
 
     <!-- ================= BOOKING SECTION ================= -->
-    <section id="booking" class="section booking-section">
-        <div class="section-inner reveal">
-            <div class="section-header center">
-                <h2>Book Me</h2>
-                <p>Share a few details and I’ll get back to you with availability and next steps.</p>
+<section id="booking" class="section booking-section">
+    <div class="section-inner reveal">
+        <div class="section-header center">
+            <h2>Book Me</h2>
+            <p>Share a few details and I’ll get back to you with availability and next steps.</p>
+        </div>
+
+        <!-- Formspree-powered form -->
+        <form
+            id="bookingForm"
+            class="booking-form"
+            action="https://formspree.io/f/xpqdoeno"
+            method="POST"
+        >
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">Full Name*</label>
+                <input type="text" id="name" name="name" placeholder="Your full name" required>
             </div>
 
-            <form id="bookingForm" class="booking-form">
-                <div class="form-group">
-                    <label for="name">Full Name*</label>
-                    <input type="text" id="name" name="name" placeholder="Your full name" required>
-                </div>
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address*</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+            </div>
 
-                <div class="form-group">
-                    <label for="email">Email Address*</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                </div>
+            <!-- Event type -->
+            <div class="form-group">
+                <label for="eventType">Event Type*</label>
+                <input type="text" id="eventType" name="eventType" placeholder="Conference, gala, launch, etc." required>
+            </div>
 
-                <div class="form-group">
-                    <label for="eventType">Event Type*</label>
-                    <input type="text" id="eventType" name="eventType" placeholder="Conference, gala, launch, etc." required>
-                </div>
+            <!-- Date -->
+            <div class="form-group">
+                <label for="eventDate">Event Date (if known)</label>
+                <input type="date" id="eventDate" name="eventDate">
+            </div>
 
-                <div class="form-group">
-                    <label for="eventDate">Event Date (if known)</label>
-                    <input type="date" id="eventDate" name="eventDate">
-                </div>
+            <!-- Budget -->
+            <div class="form-group">
+                <label for="budget">Estimated Budget (optional)</label>
+                <input type="text" id="budget" name="budget" placeholder="e.g. $2,000 - $5,000">
+            </div>
 
-                <div class="form-group">
-                    <label for="budget">Estimated Budget (optional)</label>
-                    <input type="text" id="budget" name="budget" placeholder="e.g. 1,000 - 5,000">
-                </div>
+            <!-- Message -->
+            <div class="form-group form-group-full">
+                <label for="message">Tell me about your event*</label>
+                <textarea id="message" name="message" rows="4" placeholder="Audience size, location, goals, etc." required></textarea>
+            </div>
 
-                <div class="form-group form-group-full">
-                    <label for="message">Tell me about your event*</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Audience size, location, goals, etc." required></textarea>
-                </div>
+            <button type="submit" class="btn primary-btn form-btn">
+                Submit Booking Request
+            </button>
 
-                <button type="submit" class="btn primary-btn form-btn">
-                    Submit Booking Request
-                </button>
+            <p class="form-note">* Required fields.</p>
+        </form>
+    </div>
+</section>
 
-                <p class="form-note">* Required fields. I usually respond within 24–48 hours.</p>
-            </form>
-        </div>
-    </section>
 
     <!-- Booking Confirmation Modal -->
     <div id="bookingModal" class="modal">
@@ -416,7 +435,7 @@
     </footer>
 
     <!-- Floating WhatsApp/Chat button -->
-    <a href="https://wa.me/+233 59 775 0438" class="floating-chat" target="_blank" aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/+233597750438" class="floating-chat" target="_blank" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 

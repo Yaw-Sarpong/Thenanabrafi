@@ -1,3 +1,60 @@
+
+// ================================
+// THEME TOGGLE (DARK / LIGHT)
+// ================================
+
+const THEME_KEY = 'site-theme';
+
+/**
+ * Apply the given theme ("dark" or "light") to the document
+ * and update the toggle icon.
+ */
+function applyTheme(theme) {
+    const root = document.documentElement; // <html>
+    root.setAttribute('data-theme', theme);
+
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        const icon = toggle.querySelector('i');
+        if (icon) {
+            if (theme === 'light') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+    }
+}
+
+/**
+ * Initialize theme from localStorage or system preference.
+ */
+function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    const prefersDark =
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const initialTheme = saved || (prefersDark ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem(THEME_KEY, next);
+        });
+    }
+}
+
+// Run immediately (script is at bottom of body, so DOM is ready)
+initTheme();
+
+
 // ================================
 // NAVIGATION: MOBILE TOGGLE
 // ================================
@@ -269,29 +326,39 @@ window.addEventListener('load', () => {
 // Also reveal on scroll
 window.addEventListener('scroll', handleScrollReveal);
 
-// ================================
+/// ================================
 // GALLERY LIGHTBOX
 // ================================
 
 const lightbox = document.getElementById('lightbox');
 const lightboxImage = document.querySelector('.lightbox-image');
 const lightboxClose = document.querySelector('.lightbox-close');
+const galleryItems = document.querySelectorAll('.gallery-item');
 
-document.querySelectorAll('.gallery-item').forEach(img => {
-    img.addEventListener('click', () => {
-        const fullSrc = img.getAttribute('data-full') || img.src;
-        if (!lightboxImage || !lightbox) return;
-        lightboxImage.src = fullSrc;
-        lightbox.classList.add('show');
+if (lightbox && lightboxImage && galleryItems.length) {
+    galleryItems.forEach(img => {
+        img.addEventListener('click', () => {
+            // Prefer data-full if it's present and not empty, else fall back to src
+            const raw = img.getAttribute('data-full');
+            const trimmed = raw ? raw.trim() : '';
+            const fullSrc = trimmed || img.src;
+
+            // Debug tip: if something is wrong, this will show in the console
+            // console.log('Opening lightbox image:', fullSrc);
+
+            lightboxImage.src = fullSrc;
+            lightbox.classList.add('show');
+        });
     });
-});
 
-if (lightboxClose && lightbox && lightboxImage) {
-    lightboxClose.addEventListener('click', () => {
-        lightbox.classList.remove('show');
-        lightboxImage.src = '';
-    });
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('show');
+            lightboxImage.src = '';
+        });
+    }
 
+    // Close when clicking outside the image
     lightbox.addEventListener('click', e => {
         if (e.target === lightbox) {
             lightbox.classList.remove('show');
@@ -299,6 +366,7 @@ if (lightboxClose && lightbox && lightboxImage) {
         }
     });
 }
+
 
 // ================================
 // TESTIMONIALS SLIDER
@@ -340,74 +408,6 @@ if (testimonials.length) {
     }, 7000);
 }
 
-// ================================
-// BOOKING FORM HANDLING
-// ================================
-
-const bookingForm = document.getElementById('bookingForm');
-const bookingModal = document.getElementById('bookingModal');
-const bookingModalClose = document.getElementById('bookingModalClose');
-const bookingModalOk = document.getElementById('bookingModalOk');
-
-if (bookingForm) {
-    bookingForm.addEventListener('submit', event => {
-        event.preventDefault();
-
-        const formData = new FormData(bookingForm);
-        const data = Object.fromEntries(formData.entries());
-
-        if (!data.name || !data.email || !data.eventType || !data.message) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-
-        // Build email
-        const subject = encodeURIComponent('New Booking Inquiry from ' + data.name);
-        const bodyLines = [
-            `Name: ${data.name}`,
-            `Email: ${data.email}`,
-            `Event Type: ${data.eventType}`,
-            `Event Date: ${data.eventDate || 'Not specified'}`,
-            `Budget: ${data.budget || 'Not specified'}`,
-            '',
-            'Event Details:',
-            data.message
-        ];
-        const body = encodeURIComponent(bodyLines.join('\n'));
-
-        const yourEmail = 'naoabrafi@gmail.com'; // <-- booking email
-
-        // Open mail client with prefilled email to you
-        window.location.href = `mailto:${yourEmail}?subject=${subject}&body=${body}`;
-
-        // Optional confirmation modal
-        if (bookingModal) {
-            bookingModal.classList.add('show');
-        }
-
-        bookingForm.reset();
-    });
-}
-
-if (bookingModalClose && bookingModal) {
-    bookingModalClose.addEventListener('click', () => {
-        bookingModal.classList.remove('show');
-    });
-}
-
-if (bookingModalOk && bookingModal) {
-    bookingModalOk.addEventListener('click', () => {
-        bookingModal.classList.remove('show');
-    });
-}
-
-if (bookingModal) {
-    bookingModal.addEventListener('click', e => {
-        if (e.target === bookingModal) {
-            bookingModal.classList.remove('show');
-        }
-    });
-}
 
 // ================================
 // BACK TO TOP BUTTON

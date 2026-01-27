@@ -14,6 +14,54 @@
     --color-text-muted: #9ca3af;
     --color-border: #1f2937;
 
+    /* Light theme overrides */
+:root[data-theme="light"] {
+    --color-bg: #f3f4f6;
+    --color-bg-soft: #e5e7eb;
+    --color-card: #ffffff;
+    --color-primary: #ec4899;      /* keep brand colors the same */
+    --color-primary-soft: rgba(236, 72, 153, 0.08);
+    --color-secondary: #6366f1;
+    --color-text: #111827;
+    --color-text-muted: #6b7280;
+    --color-border: #d1d5db;
+    --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+/* Body background for light mode */
+:root[data-theme="light"] body {
+    background: #f3f4f6;
+}
+
+/* Navbar in light mode */
+:root[data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom-color: rgba(209, 213, 219, 0.9);
+}
+
+/* Footer in light mode */
+:root[data-theme="light"] .footer {
+    background: #ffffff;
+    color: #111827;
+}
+
+/* Adjust some dark-specific panels to use card color */
+:root[data-theme="light"] .about-section,
+:root[data-theme="light"] .services-section,
+:root[data-theme="light"] .articles-section,
+:root[data-theme="light"] .booking-section,
+:root[data-theme="light"] .testimonials-section,
+:root[data-theme="light"] .gallery-section {
+    background: #f9fafb;
+}
+
+:root[data-theme="light"] .article-page {
+    background: #f3f4f6;
+}
+
+
+
+
     /* Shadows & radius */
     --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
     --radius-card: 18px;
@@ -227,6 +275,36 @@ img {
 .nav-toggle.open .bar:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
 }
+/* Theme toggle button */
+.theme-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    margin-left: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+    font-size: 0.9rem;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border-color: rgba(236, 72, 153, 0.9);
+}
+
+/* Light mode version of the toggle */
+:root[data-theme="light"] .theme-toggle {
+    background: #f9fafb;
+    color: #111827;
+    border-color: rgba(209, 213, 219, 0.9);
+}
+
 
 /* Mobile menu styles */
 @media (max-width: 768px) {
@@ -366,14 +444,30 @@ img {
         text-align: center;
     }
 
+    /* Put the image first and stack things nicely */
     .hero-image-wrapper {
         order: -1;
-        margin-bottom: 10px;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
+    /* Let the image breathe on mobile */
+    .hero-image {
+        width: 260px;
+        height: auto;              /* keep proportions */
+    }
+
+    /* On phone: card goes BELOW the picture, not on top */
     .hero-stats-card {
-        left: 50%;
-        transform: translateX(-50%);
+        position: static;          /* no absolute overlay */
+        margin-top: 14px;
+        max-width: 260px;
+        text-align: center;
+        left: auto;
+        bottom: auto;
+        transform: none;
     }
 
     .hero-actions {
@@ -384,6 +478,7 @@ img {
         justify-content: center;
     }
 }
+
 
 /* ==============================
    ABOUT SECTION
