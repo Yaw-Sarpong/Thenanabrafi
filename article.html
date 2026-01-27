@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article | Jane Doe</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- ============ SIMPLE NAVBAR (back to main site) ============ -->
+    <header class="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-highlight">Nana</span> Abrafi
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html#articles"><i class="fa-solid fa-arrow-left"></i> Back to Articles</a>
+            </nav>
+
+            <!-- Optional mobile toggle (not really needed here, but harmless) -->
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============ ARTICLE CONTENT ============ -->
+    <main id="articlePage" class="section article-page">
+        <div class="section-inner article-layout">
+            
+            <!-- Header / Meta -->
+            <header class="article-header">
+                <a href="index.html#articles" class="article-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Articles</span>
+                </a>
+
+                <div class="article-header-top">
+                    <span id="articleTag" class="article-tag article-tag-header">Article</span>
+                </div>
+
+                <h1 id="articleTitle" class="article-title">
+                    Loading article...
+                </h1>
+
+                <p id="articleSummary" class="article-summary">
+                    <!-- Short summary goes here -->
+                </p>
+            </header>
+
+            <!-- Cover Image -->
+            <div id="articleCoverWrapper" class="article-cover-wrapper">
+                <img id="articleCover" src="" alt="Article cover image" class="article-cover">
+            </div>
+
+            <!-- Body / Content -->
+            <article class="article-body">
+                <div id="articleContent" class="article-content">
+                    <!-- Full article text will be injected here from localStorage -->
+                </div>
+            </article>
+
+            <!-- Extra Media (gallery / embeds) -->
+            <section id="articleMediaSection" class="article-media-section">
+                <h2>Media</h2>
+                <p class="article-media-note">
+                    Additional images or media related to this article.
+                </p>
+                <div id="articleMediaGrid" class="article-media-grid">
+                    <!-- Media thumbnails injected here if provided -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© <span id="year"></span> SKY Tech. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Reuse main front-end JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>

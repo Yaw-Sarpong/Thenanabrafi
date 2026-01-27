@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Jane Doe</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Simple Navbar -->
+    <header class="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-highlight">Jane</span> Admin
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Site</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============== ADMIN MAIN CONTENT ============== -->
+    <main class="section">
+        <div class="section-inner admin-container">
+            <div class="section-header">
+                <h2>Admin Dashboard</h2>
+                <p>
+                    Manage the articles that appear on the public site.
+                    <span class="muted-text">(Articles are stored in this browser using localStorage.)</span>
+                </p>
+            </div>
+
+            <div class="admin-grid">
+                <!-- LEFT: Article Form -->
+                <section class="admin-panel">
+                    <h3>New / Edit Article</h3>
+                    <p class="muted-text">
+                        The full article content and images are stored inside this website.
+                        Visitors click an article card on the main site and read it on <strong>article.html</strong>.
+                    </p>
+
+                    <form id="adminArticleForm" class="admin-form">
+                        <!-- Hidden field to track edit mode -->
+                        <input type="hidden" id="adminArticleId">
+
+                        <!-- Title -->
+                        <div class="form-group">
+                            <label for="adminTitle">Title*</label>
+                            <input type="text" id="adminTitle" name="title" placeholder="Article title" required>
+                        </div>
+
+                        <!-- Tag / Category -->
+                        <div class="form-group">
+                            <label for="adminTag">Tag / Category (optional)</label>
+                            <input type="text" id="adminTag" name="tag" placeholder="Public Speaking, Branding...">
+                        </div>
+
+                        <!-- Short Summary -->
+                        <div class="form-group">
+                            <label for="adminSummary">Short Summary* (shown on cards)</label>
+                            <textarea id="adminSummary" name="summary" rows="3" placeholder="One or two sentences about this article" required></textarea>
+                        </div>
+
+                        <!-- Cover Image URL -->
+                        <div class="form-group">
+                            <label for="adminCover">Cover Image URL / Path (optional)</label>
+                            <input type="text" id="adminCover" name="cover" placeholder="e.g. media/article1.jpg or https://...">
+                        </div>
+
+                        <!-- Extra Media URLs -->
+                        <div class="form-group">
+                            <label for="adminMedia">Extra Media URLs (optional)</label>
+                            <textarea id="adminMedia" name="media" rows="2" placeholder="Comma-separated image or video URLs (e.g. media/pic1.jpg, https://...)"></textarea>
+                        </div>
+
+                        <!-- Full Content -->
+                        <div class="form-group">
+                            <label for="adminContent">Full Article Content*</label>
+                            <textarea id="adminContent" name="content" rows="6" placeholder="Write or paste the full article text here..." required></textarea>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="admin-form-actions">
+                            <button type="submit" class="btn primary-btn">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Article
+                            </button>
+                            <button type="button" id="adminResetBtn" class="btn ghost-btn">
+                                <i class="fa-solid fa-rotate"></i> Clear Form
+                            </button>
+                        </div>
+
+                        <p class="form-note">
+                            * Required fields. Saving an existing article will update it on the public site.
+                        </p>
+                    </form>
+                </section>
+
+                <!-- RIGHT: Article List -->
+                <section class="admin-panel">
+                    <div class="admin-list-header">
+                        <h3>Existing Articles</h3>
+                        <button id="adminClearAll" class="btn ghost-btn admin-danger-btn" type="button">
+                            <i class="fa-solid fa-trash"></i> Clear All
+                        </button>
+                    </div>
+
+                    <p class="muted-text">
+                        Click <strong>Edit</strong> to load an article into the form, or <strong>Delete</strong> to remove it.
+                    </p>
+
+                    <div id="adminArticlesList" class="admin-articles-list">
+                        <!-- Articles from localStorage rendered here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simple footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>Admin dashboard · © <span id="adminYear"></span> Jane Doe.</p>
+        </div>
+    </footer>
+
+    <!-- Admin-specific JS -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
