@@ -3,74 +3,49 @@
    ============================== */
 
 :root {
-    /* Color palette */
-    --color-bg: #050816;
-    --color-bg-soft: #0f172a;
-    --color-card: #0b1120;
-    --color-primary: #ec4899;   /* pink accent */
-    --color-primary-soft: rgba(236, 72, 153, 0.15);
-    --color-secondary: #6366f1; /* indigo accent */
+    /* DARK THEME (default) – monochrome */
+    --color-bg: #050505;
+    --color-bg-soft: #111111;
+    --color-card: #0b0b0b;
+
+    --color-primary: #ffffff;                     /* main accent (light) */
+    --color-primary-soft: rgba(255, 255, 255, 0.12);
+    --color-secondary: #9ca3af;                  /* soft grey for gradients */
+
     --color-text: #f9fafb;
     --color-text-muted: #9ca3af;
-    --color-border: #1f2937;
+    --color-border: #27272f;
 
-    /* Light theme overrides */
-:root[data-theme="light"] {
-    --color-bg: #f3f4f6;
-    --color-bg-soft: #e5e7eb;
-    --color-card: #ffffff;
-    --color-primary: #ec4899;      /* keep brand colors the same */
-    --color-primary-soft: rgba(236, 72, 153, 0.08);
-    --color-secondary: #6366f1;
-    --color-text: #111827;
-    --color-text-muted: #6b7280;
-    --color-border: #d1d5db;
-    --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.12);
-}
-
-/* Body background for light mode */
-:root[data-theme="light"] body {
-    background: #f3f4f6;
-}
-
-/* Navbar in light mode */
-:root[data-theme="light"] .navbar {
-    background: rgba(255, 255, 255, 0.9);
-    border-bottom-color: rgba(209, 213, 219, 0.9);
-}
-
-/* Footer in light mode */
-:root[data-theme="light"] .footer {
-    background: #ffffff;
-    color: #111827;
-}
-
-/* Adjust some dark-specific panels to use card color */
-:root[data-theme="light"] .about-section,
-:root[data-theme="light"] .services-section,
-:root[data-theme="light"] .articles-section,
-:root[data-theme="light"] .booking-section,
-:root[data-theme="light"] .testimonials-section,
-:root[data-theme="light"] .gallery-section {
-    background: #f9fafb;
-}
-
-:root[data-theme="light"] .article-page {
-    background: #f3f4f6;
-}
-
-
-
-
-    /* Shadows & radius */
-    --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.85);
     --radius-card: 18px;
 
-    /* Sizes */
     --max-width: 1120px;
 }
 
-/* Basic reset & base styles */
+/* LIGHT THEME – monochrome (white background, dark text) */
+:root[data-theme="light"] {
+    --color-bg: #f9fafb;
+    --color-bg-soft: #e5e7eb;
+    --color-card: #ffffff;
+
+    --color-primary: #111827;                      /* main accent (dark) */
+    --color-primary-soft: rgba(0, 0, 0, 0.04);
+    --color-secondary: #6b7280;
+
+    --color-text: #111827;
+    --color-text-muted: #6b7280;
+    --color-border: #d1d5db;
+
+    --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.18);
+    --radius-card: 18px;
+
+    --max-width: 1120px;
+}
+
+/* ==============================
+   BASE RESET & ELEMENTS
+   ============================== */
+
 *,
 *::before,
 *::after {
@@ -84,9 +59,14 @@ html {
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at top left, #1e293b 0, #020617 45%);
+    background: radial-gradient(circle at top left, #111827 0, var(--color-bg) 55%);
     color: var(--color-text);
     line-height: 1.6;
+}
+
+/* Light mode body override */
+:root[data-theme="light"] body {
+    background: #f9fafb;
 }
 
 /* Remove default link styles and keep nice hover */
@@ -126,7 +106,10 @@ img {
     text-align: center;
 }
 
-/* CTA Buttons */
+/* ==============================
+   BUTTONS
+   ============================== */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -140,17 +123,19 @@ img {
     font-size: 0.95rem;
 }
 
+/* Monochrome primary button */
 .primary-btn {
     background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    box-shadow: 0 12px 30px rgba(236, 72, 153, 0.35);
+    color: #000;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .primary-btn:hover {
     transform: translateY(-1px) scale(1.01);
-    box-shadow: 0 18px 40px rgba(129, 140, 248, 0.5);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 
+/* Outline / ghost button */
 .ghost-btn {
     background: transparent;
     color: var(--color-text);
@@ -173,6 +158,11 @@ img {
     backdrop-filter: blur(18px);
     background: rgba(15, 23, 42, 0.85);
     border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+:root[data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom-color: rgba(209, 213, 219, 0.9);
 }
 
 .nav-inner {
@@ -228,17 +218,18 @@ img {
     width: 100%;
 }
 
+/* Book Me CTA in nav */
 .nav-cta {
     padding: 0.45rem 1.1rem;
     border-radius: 999px;
-    background: rgba(236, 72, 153, 0.12);
-    color: var(--color-primary);
-    border: 1px solid rgba(236, 72, 153, 0.6);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-text);
+    border: 1px solid rgba(249, 250, 251, 0.7);
 }
 
 .nav-cta:hover {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: #fff;
+    background: #ffffff;
+    color: #000;
 }
 
 /* Mobile nav toggle button (hamburger) */
@@ -249,7 +240,6 @@ img {
     border-radius: 999px;
     border: 1px solid rgba(148, 163, 184, 0.4);
     background: rgba(15, 23, 42, 0.9);
-    display: none;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -275,6 +265,7 @@ img {
 .nav-toggle.open .bar:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
 }
+
 /* Theme toggle button */
 .theme-toggle {
     width: 36px;
@@ -294,8 +285,9 @@ img {
 
 .theme-toggle:hover {
     transform: translateY(-1px);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    border-color: rgba(236, 72, 153, 0.9);
+    background: #f9fafb;
+    border-color: rgba(249, 250, 251, 0.9);
+    color: #000;
 }
 
 /* Light mode version of the toggle */
@@ -304,7 +296,6 @@ img {
     color: #111827;
     border-color: rgba(209, 213, 219, 0.9);
 }
-
 
 /* Mobile menu styles */
 @media (max-width: 768px) {
@@ -479,13 +470,12 @@ img {
     }
 }
 
-
 /* ==============================
    ABOUT SECTION
    ============================== */
 
 .about-section {
-    background: radial-gradient(circle at top, rgba(37, 99, 235, 0.16), transparent 60%);
+    background: radial-gradient(circle at top, rgba(148, 163, 184, 0.18), transparent 60%);
 }
 
 .about-grid {
@@ -542,7 +532,7 @@ img {
    ============================== */
 
 .services-section {
-    background: radial-gradient(circle at bottom, rgba(236, 72, 153, 0.12), transparent 55%);
+    background: radial-gradient(circle at bottom, rgba(148, 163, 184, 0.16), transparent 55%);
 }
 
 .card-grid {
@@ -557,14 +547,14 @@ img {
     border-radius: var(--radius-card);
     padding: 18px 16px 18px;
     border: 1px solid var(--color-border);
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.7);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.9);
-    border-color: rgba(236, 72, 153, 0.6);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+    border-color: rgba(249, 250, 251, 0.7);
 }
 
 .card-icon {
@@ -626,6 +616,10 @@ img {
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
+:root[data-theme="light"] .articles-section {
+    background: #f9fafb;
+}
+
 .articles-grid {
     margin-top: 28px;
     display: grid;
@@ -643,11 +637,15 @@ img {
     transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
+:root[data-theme="light"] .article-card {
+    background: #ffffff;
+}
+
 .article-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top right, rgba(236, 72, 153, 0.18), transparent 55%);
+    background: radial-gradient(circle at top right, rgba(148, 163, 184, 0.2), transparent 55%);
     opacity: 0;
     transition: opacity 0.18s ease;
 }
@@ -659,7 +657,7 @@ img {
 .article-card:hover {
     border-color: var(--color-primary);
     transform: translateY(-4px);
-    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.9);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.9);
 }
 
 .article-tag {
@@ -692,6 +690,21 @@ img {
     color: var(--color-primary);
 }
 
+/* Card image on article cards (index) */
+.article-card-image {
+    margin: -4px -4px 8px;
+    border-radius: 14px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.article-card-image img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    display: block;
+}
+
 /* Articles responsive */
 @media (max-width: 900px) {
     .articles-grid {
@@ -709,7 +722,7 @@ img {
    GALLERY SECTION + LIGHTBOX
    ============================== */
 
-/* ===== GALLERY SECTION ===== */
+/* GALLERY SECTION */
 .gallery-grid {
     margin-top: 30px;
     display: grid;
@@ -720,8 +733,8 @@ img {
 /* each image is now a uniform tile */
 .gallery-item {
     width: 100%;
-    aspect-ratio: 4 / 3;          /* change to 3 / 4 or 1 / 1 if you prefer */
-    object-fit: cover;            /* crop nicely to fill the box */
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid rgba(148, 163, 184, 0.35);
@@ -731,10 +744,9 @@ img {
 
 .gallery-item:hover {
     transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.9);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.9);
     border-color: var(--color-primary);
 }
-
 
 /* Gallery responsive */
 @media (max-width: 992px) {
@@ -797,7 +809,7 @@ img {
    ============================== */
 
 .testimonials-section {
-    background: radial-gradient(circle at top, rgba(99, 102, 241, 0.18), transparent 55%);
+    background: radial-gradient(circle at top, rgba(148, 163, 184, 0.18), transparent 55%);
 }
 
 .testimonial-slider {
@@ -819,7 +831,7 @@ img {
     border-radius: var(--radius-card);
     border: 1px solid var(--color-border);
     padding: 24px 22px;
-    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.85);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.85);
 }
 
 .testimonial.active {
@@ -870,7 +882,7 @@ img {
    ============================== */
 
 .booking-section {
-    background: radial-gradient(circle at bottom, rgba(236, 72, 153, 0.19), transparent 60%);
+    background: radial-gradient(circle at bottom, rgba(148, 163, 184, 0.22), transparent 60%);
 }
 
 .booking-form {
@@ -883,6 +895,10 @@ img {
     padding: 20px 18px 22px;
     border: 1px solid rgba(148, 163, 184, 0.45);
     box-shadow: var(--shadow-soft);
+}
+
+:root[data-theme="light"] .booking-form {
+    background: #ffffff;
 }
 
 .form-group {
@@ -910,13 +926,23 @@ img {
     font-family: inherit;
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+:root[data-theme="light"] .form-group input,
+:root[data-theme="light"] .form-group textarea {
+    background: #ffffff;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.55);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+:root[data-theme="light"] .form-group input:focus,
+:root[data-theme="light"] .form-group textarea:focus {
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.5);
 }
 
 .form-btn {
@@ -990,6 +1016,162 @@ img {
 }
 
 /* ==============================
+   ARTICLE PAGE STYLES
+   ============================== */
+
+.article-page {
+    background: radial-gradient(circle at top, rgba(148, 163, 184, 0.16), transparent 60%);
+}
+
+:root[data-theme="light"] .article-page {
+    background: #f3f4f6;
+}
+
+.article-layout {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.article-header {
+    margin-bottom: 18px;
+}
+
+.article-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+}
+
+.article-back i {
+    font-size: 0.75rem;
+}
+
+.article-header-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.article-tag-header {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+:root[data-theme="light"] .article-tag-header {
+    background: #111827;
+    color: #f9fafb;
+}
+
+.article-title {
+    font-size: 1.8rem;
+    margin: 0 0 6px;
+}
+
+.article-summary {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.article-cover-wrapper {
+    margin: 18px 0 16px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+}
+
+.article-cover {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+}
+
+/* Article body text */
+.article-body {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    padding: 18px 18px 20px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.95);
+}
+
+:root[data-theme="light"] .article-body {
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+.article-content {
+    font-size: 0.95rem;
+    color: #e5e7eb;
+    line-height: 1.7;
+}
+
+:root[data-theme="light"] .article-content {
+    color: #111827;
+}
+
+.article-content p {
+    margin: 0 0 0.9rem;
+}
+
+/* Extra media section */
+.article-media-section {
+    margin-top: 26px;
+    border-top: 1px solid rgba(148, 163, 184, 0.35);
+    padding-top: 18px;
+}
+
+.article-media-section h2 {
+    font-size: 1.1rem;
+    margin: 0 0 6px;
+}
+
+.article-media-note {
+    margin: 0 0 10px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.article-media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.article-media-item {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: #020617;
+    display: block;
+}
+
+:root[data-theme="light"] .article-media-item {
+    background: #ffffff;
+}
+
+.article-media-item img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 640px) {
+    .article-title {
+        font-size: 1.45rem;
+    }
+
+    .article-body {
+        padding: 14px 14px 16px;
+    }
+}
+
+/* ==============================
    FOOTER + FLOATING BUTTONS
    ============================== */
 
@@ -997,6 +1179,11 @@ img {
     border-top: 1px solid rgba(148, 163, 184, 0.25);
     background: #020617;
     padding: 28px 20px 18px;
+}
+
+:root[data-theme="light"] .footer {
+    background: #ffffff;
+    color: #111827;
 }
 
 .footer-inner {
@@ -1048,6 +1235,11 @@ img {
     transition: background 0.18s ease, transform 0.18s ease;
 }
 
+:root[data-theme="light"] .footer-social a {
+    background: #f3f4f6;
+    color: #111827;
+}
+
 .footer-social a:hover {
     background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
     transform: translateY(-1px);
@@ -1077,7 +1269,7 @@ img {
     }
 }
 
-/* Floating WhatsApp button */
+/* Floating WhatsApp button (keeps brand green) */
 .floating-chat {
     position: fixed;
     bottom: 20px;
@@ -1147,6 +1339,7 @@ img {
     opacity: 1;
     transform: translateY(0);
 }
+
 /* ==============================
    ADMIN DASHBOARD STYLES
    ============================== */
@@ -1167,7 +1360,12 @@ img {
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, 0.45);
     padding: 18px 16px 20px;
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+}
+
+:root[data-theme="light"] .admin-panel {
+    background: #ffffff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
 }
 
 .admin-panel h3 {
@@ -1206,6 +1404,10 @@ img {
     border-radius: 14px;
     background: #020617;
     border: 1px solid rgba(148, 163, 184, 0.45);
+}
+
+:root[data-theme="light"] .admin-article-row {
+    background: #f9fafb;
 }
 
 .admin-article-main {
@@ -1296,8 +1498,9 @@ img {
     color: var(--color-primary);
     font-weight: 500;
 }
-/* Style for details summary in index page */
-summary{
-     color: var(--color-primary);
-     text-decoration: underline;
+
+/* Style for <details> summary in index page */
+summary {
+    color: var(--color-primary);
+    text-decoration: underline;
 }
