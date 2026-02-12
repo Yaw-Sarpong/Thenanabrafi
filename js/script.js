@@ -1,4 +1,3 @@
-
 // ================================
 // THEME TOGGLE (DARK / LIGHT)
 // ================================
@@ -43,7 +42,8 @@ function initTheme() {
     const toggle = document.getElementById('themeToggle');
     if (toggle) {
         toggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const current =
+                document.documentElement.getAttribute('data-theme') || 'dark';
             const next = current === 'dark' ? 'light' : 'dark';
             applyTheme(next);
             localStorage.setItem(THEME_KEY, next);
@@ -51,9 +51,8 @@ function initTheme() {
     }
 }
 
-// Run immediately (script is at bottom of body, so DOM is ready)
+// Run theme logic immediately
 initTheme();
-
 
 // ================================
 // NAVIGATION: MOBILE TOGGLE
@@ -68,59 +67,177 @@ if (navToggle && navLinks) {
         navLinks.classList.toggle('show');
     });
 
-    // Close mobile menu when a nav link is clicked
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('show');
+    // Close mobile nav when a link is clicked
+    navLinks.addEventListener('click', event => {
+        if (event.target.tagName.toLowerCase() === 'a') {
             navToggle.classList.remove('open');
-        });
-    });
-}
-
-// ================================
-// SMOOTH SCROLL FOR INTERNAL LINKS
-// ================================
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href').slice(1);
-        const targetEl = document.getElementById(targetId);
-        if (!targetEl) return;
-
-        e.preventDefault();
-
-        window.scrollTo({
-            top: targetEl.offsetTop - 72,
-            behavior: 'smooth'
-        });
-    });
-});
-
-// ================================
-// SCROLL REVEAL ANIMATION
-// ================================
-
-const revealElements = document.querySelectorAll('.reveal');
-
-function handleScrollReveal() {
-    const triggerBottom = window.innerHeight * 0.82;
-
-    revealElements.forEach(el => {
-        const boxTop = el.getBoundingClientRect().top;
-        if (boxTop < triggerBottom) {
-            el.classList.add('visible');
+            navLinks.classList.remove('show');
         }
     });
 }
 
 // ================================
-// PUBLIC ARTICLES: LIST + DETAIL
-// ================================
-// ================================
-// PUBLIC ARTICLES: LIST + DETAIL
+// SCROLL REVEAL
 // ================================
 
-const STORAGE_KEY = 'articlesData';
+function handleScrollReveal() {
+    const elements = document.querySelectorAll('.reveal');
+    if (!elements.length) return;
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.15
+            }
+        );
+
+        elements.forEach(el => observer.observe(el));
+    } else {
+        // Fallback: simple scroll listener
+        const onScroll = () => {
+            const triggerBottom = window.innerHeight * 0.9;
+            elements.forEach(el => {
+                if (el.classList.contains('visible')) return;
+                const rect = el.getBoundingClientRect();
+                if (rect.top < triggerBottom) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+        window.addEventListener('scroll', onScroll);
+        onScroll();
+    }
+}
+
+// ================================
+// GALLERY LIGHTBOX
+// ================================
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.querySelector('.lightbox-image');
+const lightboxClose = document.querySelector('.lightbox-close');
+const galleryItems = document.querySelectorAll('.gallery-item');
+
+if (lightbox && lightboxImage && galleryItems.length) {
+    galleryItems.forEach(img => {
+        img.addEventListener('click', () => {
+            // Prefer data-full if present, else src
+            const raw = img.getAttribute('data-full');
+            const trimmed = raw ? raw.trim() : '';
+            const fullSrc = trimmed || img.src;
+
+            lightboxImage.src = fullSrc;
+            lightbox.classList.add('show');
+        });
+    });
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('show');
+            lightboxImage.src = '';
+        });
+    }
+
+    // Close when clicking outside the image
+    lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('show');
+            lightboxImage.src = '';
+        }
+    });
+}
+
+// ================================
+// TESTIMONIALS SLIDER
+// ================================
+
+function initTestimonialsSlider() {
+    const testimonials = document.querySelectorAll('.testimonial');
+    if (!testimonials.length) return;
+
+    const prevBtn = document.getElementById('prevTestimonial');
+    const nextBtn = document.getElementById('nextTestimonial');
+
+    let current = 0;
+    const total = testimonials.length;
+    let intervalId = null;
+
+    function show(index) {
+        testimonials.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+        });
+        current = index;
+    }
+
+    function next() {
+        const nextIndex = (current + 1) % total;
+        show(nextIndex);
+    }
+
+    function prev() {
+        const prevIndex = (current - 1 + total) % total;
+        show(prevIndex);
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        next();
+        restartAuto();
+    });
+
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+        prev();
+        restartAuto();
+    });
+
+    function startAuto() {
+        intervalId = setInterval(next, 8000);
+    }
+
+    function restartAuto() {
+        if (intervalId) clearInterval(intervalId);
+        startAuto();
+    }
+
+    show(0);
+    startAuto();
+}
+
+initTestimonialsSlider();
+
+// ================================
+// BACK TO TOP BUTTON
+// ================================
+
+const backToTopBtn = document.getElementById('backToTop');
+
+if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 450) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// ================================
+// PUBLIC ARTICLES & OPPORTUNITIES
+// ================================
+
+const STORAGE_KEY_ARTICLES = 'articlesData';
+const STORAGE_KEY_OPPORTUNITIES = 'opportunitiesData';
 
 // Escape helper
 function escapeHtml(str) {
@@ -142,7 +259,7 @@ function loadArticlesForPublic() {
 
     let articles = [];
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY_ARTICLES);
         articles = raw ? JSON.parse(raw) : [];
         if (!Array.isArray(articles)) {
             articles = [];
@@ -174,7 +291,9 @@ function loadArticlesForPublic() {
                 ${
                     coverImage
                         ? `<div class="article-card-image">
-                               <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(title)} cover">
+                               <img src="${escapeHtml(
+                                   coverImage
+                               )}" alt="${escapeHtml(title)} cover">
                            </div>`
                         : ''
                 }
@@ -244,7 +363,7 @@ function loadArticleDetail() {
 
     let articles = [];
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY_ARTICLES);
         articles = raw ? JSON.parse(raw) : [];
         if (!Array.isArray(articles)) {
             articles = [];
@@ -258,7 +377,8 @@ function loadArticleDetail() {
 
     if (!article) {
         if (titleEl) titleEl.textContent = 'Article not found';
-        contentEl.textContent = 'The requested article could not be found. It may have been removed.';
+        contentEl.textContent =
+            'The requested article could not be found. It may have been removed.';
         if (coverWrapper) coverWrapper.style.display = 'none';
         if (mediaSection) mediaSection.style.display = 'none';
         return;
@@ -287,7 +407,8 @@ function loadArticleDetail() {
             .join('');
         contentEl.innerHTML = paragraphs;
     } else {
-        contentEl.innerHTML = '<p>No content provided for this article yet.</p>';
+        contentEl.innerHTML =
+            '<p>No content provided for this article yet.</p>';
     }
 
     // Extra media gallery
@@ -312,129 +433,99 @@ function loadArticleDetail() {
     }
 }
 
+/**
+ * Load opportunities for the "Opportunities & Updates" section.
+ */
+function loadOpportunitiesForPublic() {
+    const container = document.getElementById('opportunitiesList');
+    if (!container) return; // not on index.html
+
+    let opportunities = [];
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY_OPPORTUNITIES);
+        opportunities = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(opportunities)) opportunities = [];
+    } catch (err) {
+        console.error('Error reading opportunities from localStorage:', err);
+        opportunities = [];
+    }
+
+    if (!opportunities.length) {
+        container.innerHTML = `
+            <p class="muted-text">
+                No opportunities have been posted yet. Check back soon.
+            </p>
+        `;
+        return;
+    }
+
+    let html = '';
+    opportunities.forEach(opp => {
+        const title = opp.title || 'Untitled opportunity';
+        const type = opp.type || 'Opportunity';
+        const category = opp.category || '';
+        const location = opp.location || '';
+        const summary = opp.summary || '';
+        const link = opp.link || '#';
+        const image = opp.image || '';
+
+        html += `
+            <article class="op-card" onclick="window.open('${escapeHtml(
+                link
+            )}','_blank')">
+                <div class="op-card-thumb">
+                    ${
+                        image
+                            ? `<img src="${escapeHtml(
+                                  image
+                              )}" alt="${escapeHtml(title)} thumbnail">`
+                            : `<span class="op-card-thumb-placeholder">${escapeHtml(
+                                  type
+                              )}</span>`
+                    }
+                </div>
+                <div class="op-card-body">
+                    <div>
+                        <span class="op-tag">
+                            ${escapeHtml(type)}
+                            ${
+                                category
+                                    ? ' · ' + escapeHtml(category)
+                                    : ''
+                            }
+                        </span>
+                    </div>
+                    <h3 class="op-card-title">${escapeHtml(title)}</h3>
+                    <p class="op-card-desc">${escapeHtml(summary)}</p>
+                    <div class="op-card-meta">
+                        ${
+                            location
+                                ? `<span><i class="fa-solid fa-location-dot"></i> ${escapeHtml(
+                                      location
+                                  )}</span>`
+                                : ''
+                        }
+                        <a href="${escapeHtml(
+                            link
+                        )}" target="_blank" rel="noopener">
+                            View details <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        `;
+    });
+
+    container.innerHTML = html;
+}
 
 // ================================
-// RUN ON PAGE LOAD
+// ON LOAD: INITIALISE CONTENT
 // ================================
 
 window.addEventListener('load', () => {
     handleScrollReveal();
-    loadArticlesForPublic();  // safe on pages that don't have #articlesList
-    loadArticleDetail();      // safe on pages that don't have article elements
+    loadArticlesForPublic();
+    loadArticleDetail();
+    loadOpportunitiesForPublic();
 });
-
-// Also reveal on scroll
-window.addEventListener('scroll', handleScrollReveal);
-
-/// ================================
-// GALLERY LIGHTBOX
-// ================================
-
-const lightbox = document.getElementById('lightbox');
-const lightboxImage = document.querySelector('.lightbox-image');
-const lightboxClose = document.querySelector('.lightbox-close');
-const galleryItems = document.querySelectorAll('.gallery-item');
-
-if (lightbox && lightboxImage && galleryItems.length) {
-    galleryItems.forEach(img => {
-        img.addEventListener('click', () => {
-            // Prefer data-full if it's present and not empty, else fall back to src
-            const raw = img.getAttribute('data-full');
-            const trimmed = raw ? raw.trim() : '';
-            const fullSrc = trimmed || img.src;
-
-            // Debug tip: if something is wrong, this will show in the console
-            // console.log('Opening lightbox image:', fullSrc);
-
-            lightboxImage.src = fullSrc;
-            lightbox.classList.add('show');
-        });
-    });
-
-    if (lightboxClose) {
-        lightboxClose.addEventListener('click', () => {
-            lightbox.classList.remove('show');
-            lightboxImage.src = '';
-        });
-    }
-
-    // Close when clicking outside the image
-    lightbox.addEventListener('click', e => {
-        if (e.target === lightbox) {
-            lightbox.classList.remove('show');
-            lightboxImage.src = '';
-        }
-    });
-}
-
-
-// ================================
-// TESTIMONIALS SLIDER
-// ================================
-
-const testimonials = document.querySelectorAll('.testimonial');
-let currentTestimonial = 0;
-
-const prevBtn = document.getElementById('prevTestimonial');
-const nextBtn = document.getElementById('nextTestimonial');
-
-function showTestimonial(index) {
-    testimonials.forEach((t, i) => {
-        t.classList.toggle('active', i === index);
-    });
-}
-
-if (testimonials.length) {
-    showTestimonial(currentTestimonial);
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        });
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            currentTestimonial =
-                (currentTestimonial - 1 + testimonials.length) % testimonials.length;
-            showTestimonial(currentTestimonial);
-        });
-    }
-
-    setInterval(() => {
-        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-        showTestimonial(currentTestimonial);
-    }, 7000);
-}
-
-
-// ================================
-// BACK TO TOP BUTTON
-// ================================
-
-const backToTop = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-    if (!backToTop) return;
-    if (window.scrollY > 350) {
-        backToTop.classList.add('show');
-    } else {
-        backToTop.classList.remove('show');
-    }
-});
-
-if (backToTop) {
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-// ================================
-// FOOTER YEAR (for any page using #year)
-// ================================
-
-const yearSpan = document.getElementById('year');
-if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-}
