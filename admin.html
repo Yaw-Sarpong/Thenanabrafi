@@ -112,22 +112,28 @@
                 </section>
 
                 <!-- RIGHT: Article List -->
-                <section class="admin-panel">
-                    <div class="admin-list-header">
-                        <h3>Existing Articles</h3>
-                        <button id="adminClearAll" class="btn ghost-btn admin-danger-btn" type="button">
-                            <i class="fa-solid fa-trash"></i> Clear All
-                        </button>
-                    </div>
+               <section class="admin-panel">
+    <div class="admin-list-header">
+        <h3>Existing Articles</h3>
+        <div class="admin-list-actions">
+            <button id="adminExportArticles" class="btn ghost-btn" type="button">
+                <i class="fa-solid fa-copy"></i> Export JSON
+            </button>
+            <button id="adminClearAll" class="btn ghost-btn admin-danger-btn" type="button">
+                <i class="fa-solid fa-trash"></i> Clear All
+            </button>
+        </div>
+    </div>
 
-                    <p class="muted-text">
-                        Click <strong>Edit</strong> to load an article into the form, or <strong>Delete</strong> to remove it.
-                    </p>
+    <p class="muted-text">
+        Click <strong>Edit</strong> to load an article into the form, or <strong>Delete</strong> to remove it.
+    </p>
 
-                    <div id="adminArticlesList" class="admin-articles-list">
-                        <!-- Articles from localStorage rendered here -->
-                    </div>
-                </section>
+    <div id="adminArticlesList" class="admin-articles-list">
+        <!-- Articles from localStorage rendered here -->
+    </div>
+</section>
+
             </div>
         </div>
 
@@ -205,21 +211,20 @@
 
           <!-- RIGHT: Opportunities List -->
           <section class="admin-panel">
-              <div class="admin-list-header">
-                  <h3>Existing Opportunities</h3>
-                  <button id="oppClearAll" class="btn ghost-btn admin-danger-btn" type="button">
-                      <i class="fa-solid fa-trash"></i> Clear All
-                  </button>
-              </div>
+    <div class="admin-list-header">
+        <h3>Existing Opportunities</h3>
+        <div class="admin-list-actions">
+            <button id="oppExport" class="btn ghost-btn" type="button">
+                <i class="fa-solid fa-copy"></i> Export JSON
+            </button>
+            <button id="oppClearAll" class="btn ghost-btn admin-danger-btn" type="button">
+                <i class="fa-solid fa-trash"></i> Clear All
+            </button>
+        </div>
+    </div>
+    ...
+</section>
 
-              <p class="muted-text">
-                  Click <strong>Edit</strong> to load an item into the form, or <strong>Delete</strong> to remove it.
-              </p>
-
-              <div id="adminOppList" class="admin-articles-list">
-                  <!-- Opportunities from localStorage rendered here -->
-              </div>
-          </section>
       </div>
 
     </main>

@@ -239,6 +239,39 @@ if (backToTopBtn) {
 const STORAGE_KEY_ARTICLES = 'articlesData';
 const STORAGE_KEY_OPPORTUNITIES = 'opportunitiesData';
 
+// 👉 Hard-coded fallback data for the live site.
+//    1. Go to admin page.
+//    2. Add / edit articles or opportunities.
+//    3. Click "Export JSON" there.
+//    4. Paste the JSON objects inside these arrays and commit to GitHub.
+
+const PUBLIC_ARTICLES = [
+    // Example structure (delete this comment + example when pasting real data):
+    // {
+    //   "id": "1718200000000",
+    //   "title": "How to Host Impactful Corporate Events",
+    //   "tag": "Public Speaking",
+    //   "summary": "Key principles Nana Abrafi uses when hosting high-stakes corporate functions.",
+    //   "coverImage": "media/article1.jpg",
+    //   "content": "Full article text here...",
+    //   "media": ["media/article1a.jpg"]
+    // }
+];
+
+const PUBLIC_OPPORTUNITIES = [
+    // Example structure:
+    // {
+    //   "id": "1718200000001",
+    //   "title": "Graduate Trainee Program - Accra",
+    //   "type": "Job",
+    //   "category": "Graduate",
+    //   "location": "Accra, Ghana",
+    //   "link": "https://example.com/job",
+    //   "image": "media/opportunity1.jpg",
+    //   "summary": "12-month rotational program for fresh graduates."
+    // }
+];
+
 // Escape helper
 function escapeHtml(str) {
     if (!str) return '';
@@ -269,6 +302,11 @@ function loadArticlesForPublic() {
         articles = [];
     }
 
+    // ✅ Fallback to hard-coded list if localStorage is empty
+    if (!articles.length && Array.isArray(PUBLIC_ARTICLES) && PUBLIC_ARTICLES.length) {
+        articles = PUBLIC_ARTICLES;
+    }
+
     if (!articles.length) {
         container.innerHTML = `
             <p class="muted-text">
@@ -291,9 +329,7 @@ function loadArticlesForPublic() {
                 ${
                     coverImage
                         ? `<div class="article-card-image">
-                               <img src="${escapeHtml(
-                                   coverImage
-                               )}" alt="${escapeHtml(title)} cover">
+                               <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(title)} cover">
                            </div>`
                         : ''
                 }
@@ -373,6 +409,11 @@ function loadArticleDetail() {
         articles = [];
     }
 
+    // ✅ Fallback to hard-coded list if localStorage is empty
+    if (!articles.length && Array.isArray(PUBLIC_ARTICLES) && PUBLIC_ARTICLES.length) {
+        articles = PUBLIC_ARTICLES;
+    }
+
     const article = articles.find(a => a.id === id);
 
     if (!article) {
@@ -448,6 +489,15 @@ function loadOpportunitiesForPublic() {
     } catch (err) {
         console.error('Error reading opportunities from localStorage:', err);
         opportunities = [];
+    }
+
+    // ✅ Fallback to hard-coded list if localStorage is empty
+    if (
+        !opportunities.length &&
+        Array.isArray(PUBLIC_OPPORTUNITIES) &&
+        PUBLIC_OPPORTUNITIES.length
+    ) {
+        opportunities = PUBLIC_OPPORTUNITIES;
     }
 
     if (!opportunities.length) {

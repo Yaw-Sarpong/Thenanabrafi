@@ -67,7 +67,10 @@ function loadOpportunitiesFromStorage() {
 }
 
 function saveOpportunitiesToStorage() {
-    localStorage.setItem(STORAGE_KEY_OPPORTUNITIES, JSON.stringify(adminOpportunities));
+    localStorage.setItem(
+        STORAGE_KEY_OPPORTUNITIES,
+        JSON.stringify(adminOpportunities)
+    );
 }
 
 // Simple HTML escaper
@@ -99,15 +102,21 @@ function renderAdminArticles() {
 
     let html = '';
     adminArticles.forEach(article => {
-        const mediaCount = Array.isArray(article.media) ? article.media.length : 0;
+        const mediaCount = Array.isArray(article.media)
+            ? article.media.length
+            : 0;
         html += `
             <div class="admin-article-row" data-id="${article.id}">
                 <div class="admin-article-main">
                     <div class="admin-article-title-line">
-                        <span class="admin-article-title">${escapeHtml(article.title)}</span>
+                        <span class="admin-article-title">${escapeHtml(
+                            article.title
+                        )}</span>
                         ${
                             article.tag
-                                ? `<span class="admin-badge">${escapeHtml(article.tag)}</span>`
+                                ? `<span class="admin-badge">${escapeHtml(
+                                      article.tag
+                                  )}</span>`
                                 : ''
                         }
                     </div>
@@ -165,15 +174,21 @@ function renderAdminOpportunities() {
             <div class="admin-article-row" data-id="${opp.id}">
                 <div class="admin-article-main">
                     <div class="admin-article-title-line">
-                        <span class="admin-article-title">${escapeHtml(opp.title)}</span>
+                        <span class="admin-article-title">${escapeHtml(
+                            opp.title
+                        )}</span>
                         ${
                             opp.type
-                                ? `<span class="admin-badge">${escapeHtml(opp.type)}</span>`
+                                ? `<span class="admin-badge">${escapeHtml(
+                                      opp.type
+                                  )}</span>`
                                 : ''
                         }
                         ${
                             opp.category
-                                ? `<span class="admin-badge">${escapeHtml(opp.category)}</span>`
+                                ? `<span class="admin-badge">${escapeHtml(
+                                      opp.category
+                                  )}</span>`
                                 : ''
                         }
                     </div>
@@ -183,12 +198,16 @@ function renderAdminOpportunities() {
                     <p class="admin-article-meta">
                         ${
                             opp.location
-                                ? `<i class="fa-solid fa-location-dot"></i> ${escapeHtml(opp.location)} · `
+                                ? `<i class="fa-solid fa-location-dot"></i> ${escapeHtml(
+                                      opp.location
+                                  )} · `
                                 : ''
                         }
                         ${
                             opp.link
-                                ? `<a href="${escapeHtml(opp.link)}" target="_blank" rel="noopener">View link</a>`
+                                ? `<a href="${escapeHtml(
+                                      opp.link
+                                  )}" target="_blank" rel="noopener">View link</a>`
                                 : 'No link set'
                         }
                     </p>
@@ -244,12 +263,16 @@ function setupAdminArticleForm() {
             : [];
 
         if (!title || !summary || !content) {
-            alert('Please fill in all required fields (Title, Summary, Content).');
+            alert(
+                'Please fill in all required fields (Title, Summary, Content).'
+            );
             return;
         }
 
         if (editingArticleId) {
-            const index = adminArticles.findIndex(a => a.id === editingArticleId);
+            const index = adminArticles.findIndex(
+                a => a.id === editingArticleId
+            );
             if (index !== -1) {
                 adminArticles[index].title = title;
                 adminArticles[index].tag = tag;
@@ -293,7 +316,9 @@ function setupAdminArticleForm() {
 }
 
 function updateArticleFormMode(isEditing) {
-    const panelTitle = document.querySelector('.admin-grid:first-of-type .admin-panel h3');
+    const panelTitle = document.querySelector(
+        '.admin-grid:first-of-type .admin-panel h3'
+    );
     if (!panelTitle) return;
     panelTitle.textContent = isEditing ? 'Edit Article' : 'New / Edit Article';
 }
@@ -302,6 +327,7 @@ function updateArticleFormMode(isEditing) {
 function setupAdminArticleListActions() {
     const listEl = document.getElementById('adminArticlesList');
     const clearAllBtn = document.getElementById('adminClearAll');
+    const exportBtn = document.getElementById('adminExportArticles');
 
     if (!listEl) return;
 
@@ -327,13 +353,45 @@ function setupAdminArticleListActions() {
                 alert('No articles to clear.');
                 return;
             }
-            const confirmDelete = confirm('Are you sure you want to delete ALL articles?');
+            const confirmDelete = confirm(
+                'Are you sure you want to delete ALL articles?'
+            );
             if (!confirmDelete) return;
 
             adminArticles = [];
             saveArticlesToStorage();
             renderAdminArticles();
             alert('All articles cleared.');
+        });
+    }
+
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            if (!adminArticles.length) {
+                alert('No articles to export.');
+                return;
+            }
+            const json = JSON.stringify(adminArticles, null, 2);
+            console.log('Exported articles JSON:', json);
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard
+                    .writeText(json)
+                    .then(() => {
+                        alert(
+                            'Articles JSON copied to clipboard! Paste it into PUBLIC_ARTICLES in script.js.'
+                        );
+                    })
+                    .catch(() => {
+                        alert(
+                            'Could not copy automatically. Check the browser console and copy from there.'
+                        );
+                    });
+            } else {
+                alert(
+                    'Clipboard not available. Check the browser console and copy the JSON from there.'
+                );
+            }
         });
     }
 }
@@ -363,7 +421,9 @@ function deleteArticle(articleId) {
     const article = adminArticles.find(a => a.id === articleId);
     if (!article) return;
 
-    const confirmDelete = confirm(`Delete the article "${article.title}"?`);
+    const confirmDelete = confirm(
+        `Delete the article "${article.title}"?`
+    );
     if (!confirmDelete) return;
 
     adminArticles = adminArticles.filter(a => a.id !== articleId);
@@ -402,12 +462,16 @@ function setupAdminOppForm() {
         const summary = summaryInput.value.trim();
 
         if (!title || !type || !link || !summary) {
-            alert('Please fill in all required fields (Title, Type, Link, Description).');
+            alert(
+                'Please fill in all required fields (Title, Type, Link, Description).'
+            );
             return;
         }
 
         if (editingOppId) {
-            const index = adminOpportunities.findIndex(o => o.id === editingOppId);
+            const index = adminOpportunities.findIndex(
+                o => o.id === editingOppId
+            );
             if (index !== -1) {
                 adminOpportunities[index].title = title;
                 adminOpportunities[index].type = type;
@@ -454,12 +518,17 @@ function setupAdminOppForm() {
 function setupAdminOppListActions() {
     const listEl = document.getElementById('adminOppList');
     const clearAllBtn = document.getElementById('oppClearAll');
+    const exportBtn = document.getElementById('oppExport');
 
     if (!listEl) return;
 
     listEl.addEventListener('click', event => {
-        const editBtn = event.target.closest('button[data-opp-action="edit"]');
-        const deleteBtn = event.target.closest('button[data-opp-action="delete"]');
+        const editBtn = event.target.closest(
+            'button[data-opp-action="edit"]'
+        );
+        const deleteBtn = event.target.closest(
+            'button[data-opp-action="delete"]'
+        );
         const row = event.target.closest('.admin-article-row');
         const oppId = row ? row.dataset.id : null;
         if (!oppId) return;
@@ -477,13 +546,45 @@ function setupAdminOppListActions() {
                 alert('No opportunities to clear.');
                 return;
             }
-            const confirmDelete = confirm('Are you sure you want to delete ALL opportunities?');
+            const confirmDelete = confirm(
+                'Are you sure you want to delete ALL opportunities?'
+            );
             if (!confirmDelete) return;
 
             adminOpportunities = [];
             saveOpportunitiesToStorage();
             renderAdminOpportunities();
             alert('All opportunities cleared.');
+        });
+    }
+
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            if (!adminOpportunities.length) {
+                alert('No opportunities to export.');
+                return;
+            }
+            const json = JSON.stringify(adminOpportunities, null, 2);
+            console.log('Exported opportunities JSON:', json);
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard
+                    .writeText(json)
+                    .then(() => {
+                        alert(
+                            'Opportunities JSON copied to clipboard! Paste it into PUBLIC_OPPORTUNITIES in script.js.'
+                        );
+                    })
+                    .catch(() => {
+                        alert(
+                            'Could not copy automatically. Check the browser console and copy from there.'
+                        );
+                    });
+            } else {
+                alert(
+                    'Clipboard not available. Check the browser console and copy the JSON from there.'
+                );
+            }
         });
     }
 }
@@ -510,7 +611,9 @@ function deleteOpp(oppId) {
     const opp = adminOpportunities.find(o => o.id === oppId);
     if (!opp) return;
 
-    const confirmDelete = confirm(`Delete the opportunity "${opp.title}"?`);
+    const confirmDelete = confirm(
+        `Delete the opportunity "${opp.title}"?`
+    );
     if (!confirmDelete) return;
 
     adminOpportunities = adminOpportunities.filter(o => o.id !== oppId);
