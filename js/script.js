@@ -236,17 +236,16 @@ if (backToTopBtn) {
 // PUBLIC ARTICLES & OPPORTUNITIES
 // ================================
 
-const STORAGE_KEY_ARTICLES = 'articlesData';
-const STORAGE_KEY_OPPORTUNITIES = 'opportunitiesData';
-
-// 👉 Hard-coded fallback data for the live site.
-//    1. Go to admin page.
-//    2. Add / edit articles or opportunities.
-//    3. Click "Export JSON" there.
-//    4. Paste the JSON objects inside these arrays and commit to GitHub.
+// 👉 LIVE CONTENT SOURCE:
+// These arrays are what the PUBLIC site uses.
+// 1. Go to admin page.
+// 2. Manage articles / opportunities.
+// 3. Click "Export JSON".
+// 4. Paste the exported JSON objects inside these arrays.
+// 5. Commit & push to GitHub.
 
 const PUBLIC_ARTICLES = [
-    // Example structure (delete this comment + example when pasting real data):
+    // Example structure (delete when pasting your real data):
     // {
     //   "id": "1718200000000",
     //   "title": "How to Host Impactful Corporate Events",
@@ -290,22 +289,7 @@ function loadArticlesForPublic() {
     const container = document.getElementById('articlesList');
     if (!container) return; // not on index.html
 
-    let articles = [];
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY_ARTICLES);
-        articles = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(articles)) {
-            articles = [];
-        }
-    } catch (err) {
-        console.error('Error reading articles from localStorage:', err);
-        articles = [];
-    }
-
-    // ✅ Fallback to hard-coded list if localStorage is empty
-    if (!articles.length && Array.isArray(PUBLIC_ARTICLES) && PUBLIC_ARTICLES.length) {
-        articles = PUBLIC_ARTICLES;
-    }
+    const articles = Array.isArray(PUBLIC_ARTICLES) ? PUBLIC_ARTICLES : [];
 
     if (!articles.length) {
         container.innerHTML = `
@@ -397,23 +381,7 @@ function loadArticleDetail() {
         return;
     }
 
-    let articles = [];
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY_ARTICLES);
-        articles = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(articles)) {
-            articles = [];
-        }
-    } catch (err) {
-        console.error('Error reading articles from localStorage:', err);
-        articles = [];
-    }
-
-    // ✅ Fallback to hard-coded list if localStorage is empty
-    if (!articles.length && Array.isArray(PUBLIC_ARTICLES) && PUBLIC_ARTICLES.length) {
-        articles = PUBLIC_ARTICLES;
-    }
-
+    const articles = Array.isArray(PUBLIC_ARTICLES) ? PUBLIC_ARTICLES : [];
     const article = articles.find(a => a.id === id);
 
     if (!article) {
@@ -481,24 +449,9 @@ function loadOpportunitiesForPublic() {
     const container = document.getElementById('opportunitiesList');
     if (!container) return; // not on index.html
 
-    let opportunities = [];
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY_OPPORTUNITIES);
-        opportunities = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(opportunities)) opportunities = [];
-    } catch (err) {
-        console.error('Error reading opportunities from localStorage:', err);
-        opportunities = [];
-    }
-
-    // ✅ Fallback to hard-coded list if localStorage is empty
-    if (
-        !opportunities.length &&
-        Array.isArray(PUBLIC_OPPORTUNITIES) &&
-        PUBLIC_OPPORTUNITIES.length
-    ) {
-        opportunities = PUBLIC_OPPORTUNITIES;
-    }
+    const opportunities = Array.isArray(PUBLIC_OPPORTUNITIES)
+        ? PUBLIC_OPPORTUNITIES
+        : [];
 
     if (!opportunities.length) {
         container.innerHTML = `
@@ -568,6 +521,7 @@ function loadOpportunitiesForPublic() {
 
     container.innerHTML = html;
 }
+
 
 // ================================
 // ON LOAD: INITIALISE CONTENT
