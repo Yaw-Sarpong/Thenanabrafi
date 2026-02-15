@@ -571,6 +571,75 @@ img {
         grid-template-columns: 1fr;
     }
 }
+/* Colorful gradient stat cards */
+.stat-card--blue,
+.stat-card--brown,
+.stat-card--yellow,
+.stat-card--gold {
+    color: #f9fafb; /* readable on all gradients */
+    border-color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+/* subtle overlay for readability in both themes */
+.stat-card--blue::before,
+.stat-card--brown::before,
+.stat-card--yellow::before,
+.stat-card--gold::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 55%);
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+}
+
+/* keep inner content above overlay */
+.stat-card--blue > *,
+.stat-card--brown > *,
+.stat-card--yellow > *,
+.stat-card--gold > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* BLUE – cool, confident */
+.stat-card--blue {
+    background: linear-gradient(135deg, #1d4ed8, #38bdf8);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+}
+
+/* BROWN – warm, grounded */
+.stat-card--brown {
+    background: linear-gradient(135deg, #7c2d12, #f97316);
+    box-shadow: 0 18px 40px rgba(120, 53, 15, 0.45);
+}
+
+/* YELLOW – bright, energetic */
+.stat-card--yellow {
+    background: linear-gradient(135deg, #facc15, #fde047);
+    box-shadow: 0 18px 40px rgba(202, 138, 4, 0.4);
+}
+
+/* GOLD – premium, elegant */
+.stat-card--gold {
+    background: linear-gradient(135deg, #b45309, #fbbf24);
+    box-shadow: 0 18px 40px rgba(146, 64, 14, 0.45);
+}
+
+/* Ensure text inside is always readable */
+.stat-card--blue .stat-number,
+.stat-card--blue .stat-label,
+.stat-card--brown .stat-number,
+.stat-card--brown .stat-label,
+.stat-card--yellow .stat-number,
+.stat-card--yellow .stat-label,
+.stat-card--gold .stat-number,
+.stat-card--gold .stat-label {
+    color: #f9fafb;
+}
+
 
 /* ==============================
    SERVICES SECTION
