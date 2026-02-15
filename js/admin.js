@@ -461,12 +461,13 @@ function setupAdminOppForm() {
         const image = imageInput.value.trim();
         const summary = summaryInput.value.trim();
 
-        if (!title || !type || !link || !summary) {
-            alert(
-                'Please fill in all required fields (Title, Type, Link, Description).'
-            );
-            return;
-        }
+        if (!title || !type || !summary) {
+    alert(
+        'Please fill in all required fields (Title, Type, Description). The link is optional.'
+    );
+    return;
+}
+
 
         if (editingOppId) {
             const index = adminOpportunities.findIndex(

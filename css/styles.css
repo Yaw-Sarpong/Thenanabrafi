@@ -146,6 +146,42 @@ img {
     background: rgba(15, 23, 42, 0.85);
     border-color: rgba(148, 163, 184, 0.9);
 }
+/* Softer, more tactile buttons */
+.btn {
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease;
+}
+
+.btn:active {
+    transform: translateY(1px) scale(0.99);
+    box-shadow: none;
+}
+
+/* Slight hover lift for stat cards */
+.stat-card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+    border-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Nicer icon animation on service cards */
+.card-icon {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover .card-icon {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
 
 /* ==============================
    NAVBAR
@@ -215,6 +251,15 @@ img {
 }
 
 .nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Active nav link (ScrollSpy) */
+.nav-links a.active {
+    color: var(--color-primary);
+}
+
+.nav-links a.active::after {
     width: 100%;
 }
 
@@ -1477,17 +1522,20 @@ img {
 /* ==============================
    SCROLL REVEAL ANIMATION
    ============================== */
-
 .reveal {
     opacity: 0;
     transform: translateY(35px);
-    transition: opacity 0.28s ease, transform 0.28s ease;
+    /* use CSS variable so we can stagger via JS or data attribute */
+    transition:
+        opacity 0.28s ease var(--reveal-delay, 0s),
+        transform 0.28s ease var(--reveal-delay, 0s);
 }
 
 .reveal.visible {
     opacity: 1;
     transform: translateY(0);
 }
+
 
 /* ==============================
    ADMIN DASHBOARD STYLES

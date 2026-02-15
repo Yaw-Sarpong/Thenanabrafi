@@ -54,6 +54,41 @@ function initTheme() {
 // Run theme logic immediately
 initTheme();
 
+
+
+// ================================
+// NAV SCROLLSPY (HIGHLIGHT CURRENT SECTION)
+// ================================
+
+function initScrollSpy() {
+    const sections = document.querySelectorAll('section[id]');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    if (!sections.length || !navAnchors.length) return;
+
+    function onScrollSpy() {
+        const scrollPos = window.scrollY + 140; // offset for sticky navbar
+
+        let currentId = null;
+
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            if (scrollPos >= top && scrollPos < top + height) {
+                currentId = section.id;
+            }
+        });
+
+        navAnchors.forEach(anchor => {
+            const href = anchor.getAttribute('href') || '';
+            const isActive = currentId && href === `#${currentId}`;
+            anchor.classList.toggle('active', isActive);
+        });
+    }
+
+    window.addEventListener('scroll', onScrollSpy);
+    onScrollSpy(); // run once on load
+}
+
 // ================================
 // NAVIGATION: MOBILE TOGGLE
 // ================================
@@ -79,7 +114,6 @@ if (navToggle && navLinks) {
 // ================================
 // SCROLL REVEAL
 // ================================
-
 function handleScrollReveal() {
     const elements = document.querySelectorAll('.reveal');
     if (!elements.length) return;
@@ -89,8 +123,22 @@ function handleScrollReveal() {
             entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
+                        const el = entry.target;
+
+                        // If it has an explicit data-reveal-delay, use it.
+                        // Otherwise give a small random-ish delay for variety.
+                        if (!el.style.getPropertyValue('--reveal-delay')) {
+                            const customDelay = el.dataset.revealDelay;
+                            if (customDelay) {
+                                el.style.setProperty('--reveal-delay', customDelay);
+                            } else {
+                                const randomDelay = (Math.random() * 0.15).toFixed(2); // 0–0.15s
+                                el.style.setProperty('--reveal-delay', `${randomDelay}s`);
+                            }
+                        }
+
+                        el.classList.add('visible');
+                        observer.unobserve(el);
                     }
                 });
             },
@@ -116,6 +164,7 @@ function handleScrollReveal() {
         onScroll();
     }
 }
+
 
 // ================================
 // GALLERY LIGHTBOX
@@ -469,13 +518,25 @@ function loadOpportunitiesForPublic() {
         const category = opp.category || '';
         const location = opp.location || '';
         const summary = opp.summary || '';
-        const link = opp.link || '#';
         const image = opp.image || '';
 
+        const hasLink = !!opp.link;
+        const linkEscaped = hasLink ? escapeHtml(opp.link) : '';
+
+        // Only make the card clickable if there is a real link
+        const cardOnClick = hasLink
+            ? `onclick="window.open('${linkEscaped}','_blank')"`
+            : '';
+
+        // Only show "View details" if there is a link
+        const metaLinkHtml = hasLink
+            ? `<a href="${linkEscaped}" target="_blank" rel="noopener">
+                    View details <i class="fa-solid fa-arrow-up-right-from-square"></i>
+               </a>`
+            : '';
+
         html += `
-            <article class="op-card" onclick="window.open('${escapeHtml(
-                link
-            )}','_blank')">
+            <article class="op-card" ${cardOnClick}>
                 <div class="op-card-thumb">
                     ${
                         image
@@ -508,11 +569,7 @@ function loadOpportunitiesForPublic() {
                                   )}</span>`
                                 : ''
                         }
-                        <a href="${escapeHtml(
-                            link
-                        )}" target="_blank" rel="noopener">
-                            View details <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        ${metaLinkHtml}
                     </div>
                 </div>
             </article>
@@ -520,6 +577,69 @@ function loadOpportunitiesForPublic() {
     });
 
     container.innerHTML = html;
+}
+
+// ================================
+// STAT COUNTERS (ABOUT SECTION)
+// ================================
+
+function animateCounter(el, target, duration) {
+    const start = 0;
+    const startTime = performance.now();
+
+    function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.floor(progress * (target - start) + start);
+
+        el.textContent = value.toString();
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
+function initStatCounters() {
+    const counters = document.querySelectorAll('.stat-number[data-target]');
+    if (!counters.length) return;
+
+    // Use IntersectionObserver so counters start when visible
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+
+                const el = entry.target;
+                const alreadyDone = el.dataset.counted === 'true';
+                if (alreadyDone) {
+                    observer.unobserve(el);
+                    return;
+                }
+
+                const target = parseInt(el.dataset.target, 10) || 0;
+                const duration = parseInt(el.dataset.duration, 10) || 1200; // ms
+
+                el.dataset.counted = 'true';
+                animateCounter(el, target, duration);
+
+                observer.unobserve(el);
+            });
+        }, {
+            threshold: 0.4 // roughly when ~40% of card is in view
+        });
+
+        counters.forEach(el => observer.observe(el));
+    } else {
+        // Fallback: just animate immediately if IntersectionObserver not supported
+        counters.forEach(el => {
+            const target = parseInt(el.dataset.target, 10) || 0;
+            const duration = parseInt(el.dataset.duration, 10) || 1200;
+            animateCounter(el, target, duration);
+        });
+    }
 }
 
 
@@ -532,4 +652,6 @@ window.addEventListener('load', () => {
     loadArticlesForPublic();
     loadArticleDetail();
     loadOpportunitiesForPublic();
+    initStatCounters();
+    initScrollSpy(); // 👈 add this
 });
